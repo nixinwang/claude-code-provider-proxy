@@ -44,7 +44,8 @@ class Settings(BaseSettings):
     openai_api_key: str
     big_model_name: str
     small_model_name: str
-    base_url: str = "https://openrouter.ai/api/v1"
+    # base_url: str = "https://openrouter.ai/api/v1"
+    base_url: str = "https://api.lkeap.cloud.tencent.com/v1"
     referrer_url: str = "http://localhost:8080/claude_proxy"
 
     app_name: str = "AnthropicProxy"
@@ -1476,6 +1477,9 @@ async def create_message_proxy(
 
     try:
         raw_body = await request.json()
+        # change model to be the small model
+        if 'model' in raw_body:
+            raw_body['model'] = settings.small_model_name
         debug(
             LogRecord(
                 LogEvent.ANTHROPIC_REQUEST.value,
